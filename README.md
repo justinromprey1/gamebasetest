@@ -1,5 +1,7 @@
 GAMEBASE
+
 PHP / MYSQL – VIDEO GAME DATABASE SITE
+
 The idea of this project was to develop a site using HTML, CSS, PHP 7, and MYSQL.
 I created a site where users can create an account easily.
 
@@ -19,4 +21,6 @@ I ran a test server using XAMPP on the Windows platform. All pages were built wi
 
 All admin and user pages require correct user / admin logins to order to gain access to any content.
 
-Video of site in action
+Video of site in action (running on XAMPP server):
+USERS: http://www.mediafire.com/file/l6gafd3wbfvhh32/users.mp4/file
+ADMINS: http://www.mediafire.com/file/0to567xb4bbe30y/admins.mp4/file
