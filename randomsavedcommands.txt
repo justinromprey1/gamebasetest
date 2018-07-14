@@ -1,0 +1,142 @@
+//Game and Badges table inner join
+SELECT games.title as Title, badges.title as BadgeName, req as Requirement, diff as Difficulty FROM badges
+INNER JOIN games on badges.game_id = games.id 
+ORDER by Title ASC;
+
+//adding to badges
+INSERT INTO badges (title, req, diff, game_id) VALUES ('I see that Woof', 'Unlock the Mysteries of the Dog Ending.', '4', '1');
+
+//add records to gamebase link
+<li><a href="<?php echo url_for('editgamebase.php'); ?>">Add Records to GameBase</a>
+      <?php if(!isset($_SESSION['user_id'])){ echo "You must log in to edit your GameBase!"; } ?></li>
+
+//add custom badge
+INSERT INTO custom_badges (title, req, diff, game_id, user_id) VALUES ('Fulfill Your Destiny', 'Beat the Game.', '99', '2', '5');
+
+//select and delete
+SELECT * FROM custom_badges;
+DELETE FROM custom_badges WHERE user_id = 5;
+SELECT * FROM custom_badges;
+
+//insert into games
+INSERT INTO games (title, system, dev, pub, genre, year) 
+VALUES ('SH3', 'PS2', 'Team Silent', 'Konami', 'Survival Horror', '2003');
+SELECT * FROM games;
+
+//user_games and game innerjoin
+SELECT user_games.id, games.title, games.system, games.dev, games.pub, games.genre, games.year, user_games.time_input, user_games.completed, user_games.format, user_games.status
+FROM user_games
+INNER JOIN games on user_games.game_id = games.id 
+ORDER by games.title ASC;
+
+//insert user games
+INSERT INTO user_games (completed, format, user_rating, user_id, game_id, status) VALUES ('1', 'Physical', '10', '4', '1', 'Want to Buy');
+
+//user_games creation
+DROP TABLE IF EXISTS user_games;
+CREATE TABLE user_games (
+id SERIAL,
+time_input TIMESTAMP,
+completed BOOLEAN,
+time_completed TIMESTAMP,
+format VARCHAR(255),
+user_rating INT(11),
+user_id BIGINT(20) UNSIGNED,
+game_id BIGINT(20) UNSIGNED,
+FOREIGN KEY (user_id) REFERENCES users(id),
+FOREIGN KEY (game_id) REFERENCES games(id)
+);
+
+//get user game and all info
+SELECT user_games.id, games.title, games.system, games.dev, games.pub, games.genre, games.year, user_games.time_input, user_games.completed, user_games.format, user_games.status 
+FROM user_games 
+INNER JOIN games ON user_games.game_id = games.id 
+INNER JOIN users ON user_games.user_id = users.id
+WHERE users.id = '4' 
+ORDER BY games.title ASC;
+
+
+//get user badges and all info
+SELECT user_badges.id, games.title as Game, badges.title as Title, badges.req, badges.diff, user_badges.time_complete
+FROM user_badges 
+INNER JOIN badges ON user_badges.badge_id = badges.id 
+INNER JOIN users ON user_badges.user_id = users.id
+INNER JOIN games ON badges.game_id = games.id
+WHERE users.id = '4' 
+ORDER BY games.title ASC;
+
+//insert into userbadges
+INSERT INTO user_badges (user_id, badge_id) VALUES ('4', '1');
+
+//select from user_badges
+SELECT * FROM user_badges;
+
+//global database connection variable
+
+//make query and confirm result
+
+//MYSQL query - 
+
+//store result in and return it
+
+//validate admin before insertion
+
+//hash pass in the database
+    //password is never stored directly in the database
+
+    //adding field password sent - If we used a password, password and confirm are now required
+
+
+
+//add field indicating a badge is obtained
+ALTER TABLE users ADD COLUMN badgetestobtained BOOLEAN DEFAULT false;
+UPDATE users SET badgetestobtained= true 
+WHERE id = '4';
+SELECT * FROM users;
+
+
+
+//check if a badge was inputted before. 
+//fails because it was done in show. AFTER the badge was just entered for the first time.
+<dl>
+    <dt>Exp. Earned</dt>
+    <dd><?php $value = calc_points_badge($badge['diff']);
+              $user = find_user_by_id($user_badge['user_id']);
+              $string = "badge". $user_badge['badge_id'] . "obtained";
+
+              $test = $user[$string];
+              echo " VALUE IS ".$test;
+              if($test = 1){
+                echo "You entered this badge before! No exp awarded.";
+              }
+              if($test = 0){
+                //put this into $leveled when adding level check
+                  add_exp_query($user, $value);
+                  echo "You earned " . $value . " exp. Your Exp is Now " . ($value+$user['exp']) . ".";
+                  $result2 = set_badge_obtained_for_user($user_badge);
+              }
+        ?>
+    </dd>
+</dl>
+
+//viewgamebases user_badges delete link
+<td><a class="action" href="<?php echo url_for('user_badges/delete.php?id='. hsc(urle($user_badge['id']))); ?>">Delete</a></td>
+
+//user_badges show. without badge check.
+
+<dl>
+    <dt>Exp. Earned</dt>
+    <dd><?php $value = calc_points_badge($badge['diff']);
+              $user = find_user_by_id($user_badge['user_id']);
+
+              //put this into $leveled when adding level check
+              add_exp_query($user, $value);
+              echo "You earned " . $value . " exp. Your Exp is Now " . ($value+$user['exp']) . ".";
+     ?></dd>
+  </dl>
+  <dl>
+
+  // games played buttons
+  
+          <td><a class="action" href="<?php echo url_for('user_games/edit.php?id='.hsc(urle($user_game['id']))); ?>">Edit</a></td>
+          <td><a class="action" href="<?php echo url_for('user_games/delete.php?id='. hsc(urle($user_game['id']))); ?>">Delete</a></td>
